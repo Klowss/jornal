@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jornal IFNMG</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="auth-screen">
+  <div class="card shadow-lg border-0" style="width: 100%; max-width: 420px; border-radius: 20px; overflow: hidden;">
+    <div class="card-header border-0 py-4" style="background: var(--green); text-align: center;">
+      <div class="auth-logo">JN</div>
+      <h1 class="text-white mb-0" style="font-size: 1.4rem; letter-spacing: 4px; font-weight: 700;">JORNAL IFNMG</h1>
+      <p class="mb-0 mt-1 text-white-50" style="font-size: .78rem;">Portal da Equipe de Comunicação</p>
+    </div>
+    <div class="card-body p-4">
+      <h2 id="auth-title" style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1.4rem;">Faça login para continuar</h2>
+      
+      <div class="mb-3">
+          <label class="form-label text-muted small fw-medium mb-1">Email Institucional</label>
+          <input id="a-email" type="email" class="form-control" placeholder="nome@aluno.ifnmg.edu.br">
+      </div>
+      <div class="mb-4">
+          <label class="form-label text-muted small fw-medium mb-1">Senha</label>
+          <input id="a-pass" type="password" class="form-control" placeholder="••••••••">
+      </div>
+      
+      <button class="btn btn-success w-100 fw-bold py-2 mb-3" onclick="doAuth()" id="auth-btn">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>      
+
+<div id="app">
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">JN</div>
+      <div class="sb-brand-text"><h1>JORNAL IFNMG</h1><p>Portal da Equipe</p></div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-av">A</div>
+      <div class="sb-user-info">
+        <div class="uname" id="sb-name">—</div>
+        <span class="sb-role" id="sb-role"></span>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-foot">
+      <button class="nav-item" onclick="switchView('settings')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Configurações
+      </button>
+      <button class="nav-item logout" onclick="logout()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" onclick="openSidebar()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="topbar-title" id="topbar-title">Minha Agenda</span>
+      <div class="top-search">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Pesquisar…" oninput="doSearch(this.value)">
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="switchView('notifications')">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot" id="notif-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <div class="view" id="view-calendar">
+        <div class="ph">
+          <div><h2>Agenda Geral</h2><p>Todos os eventos do jornal</p></div>
+          <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+            <div class="cal-nav"><button onclick="chMonth(-1)">&#8249;</button><span id="cal-lbl"></span><button onclick="chMonth(1)">&#8250;</button></div>
+            <button class="btn btn-success d-flex align-items-center gap-1" id="btn-add-ev" onclick="openModal('m-event')" style="display:none">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Criar Evento
+            </button>
+          </div>
+        </div>
+        <div class="cal-wrap">
+          <div class="cal-hrow"><div class="cal-dh">Dom</div><div class="cal-dh">Seg</div><div class="cal-dh">Ter</div><div class="cal-dh">Qua</div><div class="cal-dh">Qui</div><div class="cal-dh">Sex</div><div class="cal-dh">Sáb</div></div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+      </div>
+
+      <div class="view active" id="view-my-cal">
+        <div class="ph">
+          <div><h2 id="welcome-title">Minha Agenda</h2></div>
+        </div>
+
+        <h5 id="my-tasks-header" style="font-size: .9rem; font-weight: 700; margin-bottom: .8rem;">Minhas Demandas <span style="font-size: .7rem; font-weight: 400; color: var(--muted); margin-left: 5px;">Apenas atribuídas a você</span></h5>
+        <div id="my-tasks-board" class="kanban-board mb-4" style="gap: .5rem; padding-bottom: 0;">
+          <div class="k-cards w-100" id="my-personal-tasks" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .8rem; min-height: auto;">
+            </div>
+        </div>
+
+        <div id="my-events-section">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; margin-top: 1.5rem;">
+              <h5 style="font-size: .9rem; font-weight: 700; margin-bottom: 0;">Meus Eventos <span style="font-size: .7rem; font-weight: 400; color: var(--muted); margin-left: 5px;">Eventos da sua equipe</span></h5>
+              <div class="cal-nav"><button onclick="chMonthMy(-1)">&#8249;</button><span id="my-cal-lbl"></span><button onclick="chMonthMy(1)">&#8250;</button></div>
+            </div>
+            <div class="cal-wrap mt-0">
+              <div class="cal-hrow"><div class="cal-dh">Dom</div><div class="cal-dh">Seg</div><div class="cal-dh">Ter</div><div class="cal-dh">Qua</div><div class="cal-dh">Qui</div><div class="cal-dh">Sex</div><div class="cal-dh">Sáb</div></div>
+              <div class="cal-grid" id="my-cal-grid"></div>
+            </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-tasks">
+        <div class="ph">
+          <div><h2>Demandas</h2><p id="tasks-sub">Quadro de tarefas da equipe</p></div>
+          <button class="btn btn-danger d-flex align-items-center gap-1" id="btn-add-task" onclick="openModal('m-task')" style="display:none">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Demanda
+          </button>
+        </div>
+        <div id="task-filter-bar" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem"></div>
+        <div class="kanban-board">
+          <div class="k-col"><div class="k-col-head"><h3><span class="col-dot" style="background:#ef4444"></span>A Fazer</h3><span class="col-count" id="cnt-todo">0</span></div><div class="k-cards" id="col-todo"></div></div>
+          <div class="k-col"><div class="k-col-head"><h3><span class="col-dot" style="background:#f59e0b"></span>Em Andamento</h3><span class="col-count" id="cnt-doing">0</span></div><div class="k-cards" id="col-doing"></div></div>
+          <div class="k-col"><div class="k-col-head"><h3><span class="col-dot" style="background:#22c55e"></span>Concluído</h3><span class="col-count" id="cnt-done">0</span></div><div class="k-cards" id="col-done"></div></div>
+        </div>
+      </div>
+
+      <div class="view" id="view-team">
+        <div class="ph"><div><h2>Equipe</h2><p>Membros e contatos</p></div></div>
+        <div class="team-grid" id="team-grid"></div>
+      </div>
+
+      <div class="view" id="view-notifications">
+        <div class="ph">
+          <div><h2>Notificações</h2><p>Avisos e atualizações</p></div>
+          <button class="btn btn-outline-secondary btn-sm" onclick="markAllRead()">Marcar todas como lidas</button>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-4 mb-md-0">
+             <h3 style="font-size: .95rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem;">Pessoais <span class="badge bg-secondary ms-2 fw-normal" style="font-size:.65rem">Atribuídas a você</span></h3>
+             <div class="notif-list" id="notif-list-pessoal"></div>
+          </div>
+          <div class="col-md-6">
+             <h3 style="font-size: .95rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem;">Gerais da Equipe</h3>
+             <div class="notif-list" id="notif-list-geral"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-admin">
+        <div class="ph">
+          <div><h2>Administração</h2><p>Gerenciar usuários e acessos</p></div>
+          <button class="btn btn-success d-flex align-items-center gap-1" onclick="openModal('m-user')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Criar Login
+          </button>
+        </div>
+        <div class="card shadow-sm border-0 mb-4" style="border-radius:13px;overflow:hidden;">
+          <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+              <h3 class="h6 mb-0 fw-bold">Usuários do Sistema</h3>
+              <span id="admin-cnt" class="text-muted small"></span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Nome</th>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Email</th>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Equipe</th>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Nível</th>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Status</th>
+                        <th class="text-uppercase text-muted" style="font-size: .75rem; letter-spacing: .5px">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-settings">
+        <div class="ph"><div><h2>Configurações</h2><p>Personalização e preferências</p></div></div>
+
+        <div class="s-card">
+          <h3>Notificações</h3>
+          <div class="s-row"><div><div class="s-lbl">Avisos no site</div><div class="s-desc">Receber notificações dentro do portal</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+          <div class="s-row"><div><div class="s-lbl">Email institucional</div><div class="s-desc">Cópias para @aluno.ifnmg.edu.br</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+        </div>
+
+        <div class="s-card" id="team-color-card" style="display:none">
+          <h3>Cores das Equipes</h3>
+          <p style="font-size:.78rem;color:var(--muted);margin-bottom:1rem">Escolha a cor de cada equipe no sistema.</p>
+          <div id="team-color-rows"></div>
+          <div style="margin-top:1rem;display:flex;justify-content:flex-end;gap:.5rem">
+            <button class="btn btn-outline-secondary btn-sm" onclick="resetTeamColors()">Restaurar padrão</button>
+            <button class="btn btn-success btn-sm" onclick="applyTeamColors()">Salvar cores</button>
+          </div>
+        </div>
+
+        <div class="s-card">
+          <h3>Sobre</h3>
+          <div class="s-row"><div class="s-lbl">Versão</div><span style="font-size:.78rem;color:var(--muted)">1.9.0 — Jornal IFNMG</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="m-event" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Criar Evento</h5>
+        <button type="button" class="btn-close" onclick="closeModal('m-event')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Título</label>
+            <input id="ev-title" type="text" class="form-control" placeholder="Ex: Cobertura Feira de Ciências">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Data</label>
+            <input id="ev-date" type="date" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Local / Descrição</label>
+            <textarea id="ev-desc" rows="2" class="form-control" placeholder="Onde, detalhes…"></textarea>
+        </div>
+        <div class="mb-2">
+            <label class="form-label text-muted small fw-medium mb-1">Equipes necessárias</label>
+            <div class="team-checks" id="ev-checks"></div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button class="btn btn-outline-secondary" onclick="closeModal('m-event')">Cancelar</button>
+        <button class="btn btn-success" onclick="saveEvent()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="m-task" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Nova Demanda</h5>
+        <button type="button" class="btn-close" onclick="closeModal('m-task')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Título</label>
+            <input id="tk-title" type="text" class="form-control" placeholder="O que precisa ser feito?">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Instruções</label>
+            <textarea id="tk-desc" rows="3" class="form-control" placeholder="Detalhes da tarefa…"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Equipe da Demanda</label>
+            <select id="tk-team" class="form-select" onchange="updateUserDropdown()">
+              <option value="video">Edição de Vídeo</option>
+              <option value="midia">Redes Sociais / Mídia</option>
+              <option value="foto">Fotografia</option>
+              <option value="entrevista">Entrevista / Reportagem</option>
+              <option value="redacao">Redação / Roteiro</option>
+            </select>
+        </div>
+        <div class="mb-2">
+            <label class="form-label text-muted small fw-medium mb-1">Aluno Responsável (Específico)</label>
+            <select id="tk-user" class="form-select">
+              </select>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button class="btn btn-outline-secondary" onclick="closeModal('m-task')">Cancelar</button>
+        <button class="btn btn-danger" onclick="saveTask()">Criar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="m-ev-detail" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold" id="evd-title">Evento</h5>
+        <button type="button" class="btn-close" onclick="closeModal('m-ev-detail')"></button>
+      </div>
+      <div class="modal-body" id="evd-body"></div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button class="btn btn-outline-secondary" onclick="closeModal('m-ev-detail')">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="m-user" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Criar Login</h5>
+        <button type="button" class="btn-close" onclick="closeModal('m-user')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Nome Completo</label>
+            <input id="cu-name" type="text" class="form-control" placeholder="Nome do membro">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Email Institucional</label>
+            <input id="cu-email" type="email" class="form-control" placeholder="nome@aluno.ifnmg.edu.br">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Senha Temporária</label>
+            <input id="cu-pass" type="text" class="form-control" placeholder="Senha inicial">
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted small fw-medium mb-1">Equipe</label>
+            <select id="cu-team" class="form-select">
+              <option value="video">Edição de Vídeo</option>
+              <option value="midia">Redes Sociais / Mídia</option>
+              <option value="foto">Fotografia</option>
+              <option value="entrevista">Entrevista / Reportagem</option>
+              <option value="redacao">Redação / Roteiro</option>
+            </select>
+        </div>
+        <div class="mb-2" id="cu-hier-wrap">
+            <label class="form-label text-muted small fw-medium mb-1">Nível de Acesso</label>
+            <select id="cu-hier" class="form-select">
+              <option value="membro">Membro / Aluno</option>
+              <option value="lider">Líder de Equipe</option>
+              <option value="professor">Professor</option>
+            </select>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button class="btn btn-outline-secondary" onclick="closeModal('m-user')">Cancelar</button>
+        <button class="btn btn-success" onclick="createUser()">Criar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="state.js"></script>
+    <script src="ui-utils.js"></script>
+    <script src="permissions.js"></script>
+    <script src="calendar.js"></script>
+    <script src="tasks.js"></script>
+    <script src="team.js"></script>
+    <script src="notifications.js"></script>
+    <script src="admin.js"></script>
+    <script src="settings.js"></script>
+    <script src="modals.js"></script>
+
+    <script src="navigation.js"></script>
+    <script src="app.js"></script>
+    <script src="auth.js"></script
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+:root {
+  --green:      #2f8f41;
+  --green-dark: #1e6b2e;
+  --green-light:#e8f5eb;
+  --red:        #cc1d24;
+  --red-light:  #fdecea;
+  --bg:         #f4f5f0;
+  --surface:    #ffffff;
+  --border:     #e2e4dc;
+  --text:       #1a1d16;
+  --muted:      #6b7063;
+  --sidebar-w:  240px;
+  /* team colors - overrideable */
+  --c-video:      #6c3fc5; --cbg-video:      #f0ebff;
+  --c-midia:      #0ea5c4; --cbg-midia:      #e8f7fb;
+  --c-foto:       #d97706; --cbg-foto:       #fff8eb;
+  --c-entrevista: #dc4c3e; --cbg-entrevista: #fdecea;
+  --c-redacao:    #2563eb; --cbg-redacao:    #eff3ff;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Syne', sans-serif; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
